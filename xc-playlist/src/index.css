@@ -1,0 +1,181 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+*
+{
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+
+  /* Remove Margin */
+  margin: 0;
+}
+
+/* Main Content */
+
+.Content {
+  width: 300px;
+	height: 500px;
+	background-color: red;
+	
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  	
+	margin: auto;
+}
+
+/* Headers */
+
+h1 {
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 84px;
+
+  /* Set Color to Green*/
+  color: #2dd555;
+
+  /* Center the text */
+  text-align: center;
+}
+
+h2 {
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  font-size: 42px;
+
+  /* Set Color to Mint Green*/
+  color: #6cda50;
+
+  /* Center the text */
+  text-align: center;
+}
+
+h3 {
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  font-size: 24px;
+
+  /* Set Color to Light Gray*/
+  color: #cccccc;
+
+  /* Center the text */
+  text-align: center;
+}
+
+/* Text */
+
+p {
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+
+  /* Set Color to Gray*/
+  color: #585858;
+}
+
+.error {
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+
+  /* Set color to Red */
+  color: Red;
+}
+
+b {
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+
+  /* Set Color to Gray*/
+  color: #585858;
+}
+
+/* Buttons */
+
+.button {
+  /* Set Border */
+  border-radius: 2px;
+  border: 2px solid #2dd555;
+
+  /* Change Transition Duration */
+  transition-duration: 0.4s;
+
+  /* Set Background color to White */
+  background-color: white;
+
+  /* Set text color to Gray*/
+  color: #585858;
+}
+
+.button:hover {
+  /* When loginButton is hovered over change background to Green */
+  background-color: #2dd555;
+}
+
+.secondaryButton {
+  /* Set Border */
+  border-radius: 2px;
+  border: 2px solid #7c7c7c;
+
+  /* Change Transition Duration */
+  transition-duration: 0.4s;
+
+  /* Set Background color to White */
+  background-color: white;
+
+  /* Change Font */
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+}
+
+.secondaryButton:hover {
+  /* When secondaryButton is hovered over change background to Light Gray */
+  background-color: #7c7c7c;
+
+  /* Change the text color to white so its readable */
+  color: #ffffff;
+}
+
+/* Images */
+img {
+  border-radius: 8px;
+}
+
+#albumCover {
+  /* Set the size of the image */
+  width: 250px;
+  height: auto;
+
+  /* Center the image in the div */
+  display: block;
+  margin: auto;
+}
+
+/* Tables */
+
+table {
+  font-family: Roboto, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-weight: 300;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.tableHeader {
+  font-weight: bold;
+}
