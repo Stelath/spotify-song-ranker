@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
-*
-{
+* {
   /* Change Font */
   font-family: "Roboto", sans-serif;
 
@@ -11,18 +10,27 @@
 
 /* Main Content */
 
+body {
+  background-color: #000000;
+}
+
 .Content {
+  /* Set Size */
   width: 300px;
-	height: 500px;
-	background-color: red;
-	
-	position: absolute;
-	top:0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-  	
-	margin: auto;
+  height: 500px;
+
+  /* Set Background */
+  border-radius: 8px;
+  background-color: #202020;
+
+  /* Center the div */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
 }
 
 /* Headers */
@@ -153,7 +161,7 @@ img {
 
   /* Center the image in the div */
   display: block;
-  margin: auto;
+  margin: 25px auto 10px;
 }
 
 /* Tables */
@@ -178,4 +186,59 @@ tr:nth-child(even) {
 
 .tableHeader {
   font-weight: bold;
+}
+
+/* Star Rateing */
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+
+.rating-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 20px;
+}
+
+/* make hover effect work properly in IE */
+.rating__icon {
+  pointer-events: none;
+}
+
+/* hide radio inputs */
+.rating__input {
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* hide 'none' input from screenreaders */
+.rating__input--none {
+  display: none;
+}
+
+/* set icon padding and size */
+.rating__label {
+  cursor: pointer;
+  padding: 0 0.1em;
+  font-size: 2rem;
+}
+
+/* set default star color */
+.rating__icon--star {
+  color: orange;
+}
+
+/* if any input is checked, make its following siblings grey */
+.rating__input:checked ~ .rating__label .rating__icon--star {
+  color: #ddd;
+}
+
+/* make all stars orange on rating group hover */
+.rating-group:hover .rating__label .rating__icon--star {
+  color: orange;
+}
+
+/* make hovered input's following siblings grey on hover */
+.rating__input:hover ~ .rating__label .rating__icon--star {
+  color: #ddd;
 }

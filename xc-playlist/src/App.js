@@ -1,4 +1,4 @@
-import Rateing from "./Rateing";
+import Rateing from "./Rating";
 
 function App() {
   var albumCover = "https://i.scdn.co/image/ab67616d0000b2734a052b99c042dc15f933145b";
