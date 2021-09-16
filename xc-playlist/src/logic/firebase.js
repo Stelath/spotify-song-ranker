@@ -7,7 +7,7 @@ const firebaseConfig = {
   projectId: "xc-playlist",
   storageBucket: "xc-playlist.appspot.com",
   messagingSenderId: "205350291811",
-  appId: "1:205350291811:web:d59314cd2faf68ba882b56"
+  appId: "1:205350291811:web:d59314cd2faf68ba882b56",
 };
 
 // Initialize Firebase

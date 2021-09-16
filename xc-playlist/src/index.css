@@ -193,52 +193,36 @@ tr:nth-child(even) {
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
 .rating-group {
+  margin-top: 20px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-
-  margin-top: 20px;
 }
 
-/* make hover effect work properly in IE */
-.rating__icon {
-  pointer-events: none;
+.rate {
+  float: left;
+  height: 46px;
+  padding: 0 10px;
 }
 
-/* hide radio inputs */
-.rating__input {
-  position: absolute !important;
-  left: -9999px !important;
+.rate:not(:checked) > input {
+  position:absolute;
+  top:-9999px;
 }
-
-/* hide 'none' input from screenreaders */
-.rating__input--none {
-  display: none;
-}
-
-/* set icon padding and size */
-.rating__label {
+.rate:not(:checked) > label {
+  float: right;
+  width: 1.05em;
+  overflow: hidden;
+  white-space: nowrap;
   cursor: pointer;
-  padding: 0 0.1em;
-  font-size: 2rem;
+  font-size: 36px;
+  color: #ccc;
 }
-
-/* set default star color */
-.rating__icon--star {
-  color: orange;
+.rate > input:checked ~ label {
+  color: orange;    
 }
-
-/* if any input is checked, make its following siblings grey */
-.rating__input:checked ~ .rating__label .rating__icon--star {
-  color: #ddd;
-}
-
-/* make all stars orange on rating group hover */
-.rating-group:hover .rating__label .rating__icon--star {
-  color: orange;
-}
-
-/* make hovered input's following siblings grey on hover */
-.rating__input:hover ~ .rating__label .rating__icon--star {
-  color: #ddd;
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+  color: orange;  
 }

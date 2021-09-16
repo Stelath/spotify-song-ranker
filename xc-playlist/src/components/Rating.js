@@ -1,19 +1,45 @@
-const Rating = () => {
-    return(
+const Rating = (props) => {
+  return (
     <div class="rating-group">
-        <input disabled checked class="rating__input rating__input--none" name="rating" id="rating-none" value="0" type="radio"/>
-        <label aria-label="1 star" class="rating__label" for="rating-1"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-        <input class="rating__input" name="rating" id="rating-1" value="1" type="radio"/>
-        <label aria-label="2 stars" class="rating__label" for="rating-2"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-        <input class="rating__input" name="rating" id="rating-2" value="2" type="radio"/>
-        <label aria-label="3 stars" class="rating__label" for="rating-3"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-        <input class="rating__input" name="rating" id="rating-3" value="3" type="radio"/>
-        <label aria-label="4 stars" class="rating__label" for="rating-4"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-        <input class="rating__input" name="rating" id="rating-4" value="4" type="radio"/>
-        <label aria-label="5 stars" class="rating__label" for="rating-5"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-        <input class="rating__input" name="rating" id="rating-5" value="5" type="radio"/>
+      <div class="rate">
+        <input type="radio" id="star5" name="rate" value="5" />
+        <label for="star5" title="text">
+          <i
+            class="rating__icon rating__icon--star fa fa-star"
+            onClick={() => props.onRatePressed(5)}
+          />
+        </label>
+        <input type="radio" id="star4" name="rate" value="4" />
+        <label for="star4" title="text">
+          <i
+            class="rating__icon rating__icon--star fa fa-star"
+            onClick={() => props.onRatePressed(4)}
+          />
+        </label>
+        <input type="radio" id="star3" name="rate" value="3" />
+        <label for="star3" title="text">
+          <i
+            class="rating__icon rating__icon--star fa fa-star"
+            onClick={() => props.onRatePressed(3)}
+          />
+        </label>
+        <input type="radio" id="star2" name="rate" value="2" />
+        <label for="star2" title="text">
+          <i
+            class="rating__icon rating__icon--star fa fa-star"
+            onClick={() => props.onRatePressed(2)}
+          />
+        </label>
+        <input type="radio" id="star1" name="rate" value="1" />
+        <label for="star1" title="text">
+          <i
+            class="rating__icon rating__icon--star fa fa-star"
+            onClick={() => props.onRatePressed(1)}
+          />
+        </label>
+      </div>
     </div>
-    );
-}
+  );
+};
 
 export default Rating;
