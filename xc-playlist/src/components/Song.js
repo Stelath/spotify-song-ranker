@@ -21,7 +21,7 @@ const Song = (props) => {
       <img id="albumCover" alt="Album Cover" src={props.albumCover} />
       <h2>{props.songTitle}</h2>
       <h3>By: {props.artist}</h3>
-      <Rating onRatePressed={ratePressed} />
+      <Rating onRatePressed={ratePressed} initialRating={props.initialRating}/>
     </div>
   );
 };

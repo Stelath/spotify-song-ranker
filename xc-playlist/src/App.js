@@ -4,11 +4,14 @@ import firebaseApp from "./logic/firebase";
 import { arrayRemove, getFirestore } from "firebase/firestore";
 import "animate.css";
 
+// Assets
+import loadingIcon from "./assets/loading-icon.gif";
+
 // Import Components
 import Song from "./components/Song";
 
 // Import logic
-import { getSongs, getRandomSong } from "./logic/songs";
+import { getSongs, getRandomSongData} from "./logic/songs";
 import { rateSong } from "./logic/rating";
 
 function App() {
@@ -53,7 +56,6 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("Test");
     updateSong();
   }, [songList]);
 
@@ -61,10 +63,6 @@ function App() {
   const [lastSongUpdated, setlastSongUpdated] = useState(1);
   
   function updateSong() {
-    const song = getRandomSong(songList);
-    // const albumCover = song.albumCover;
-    // const songTitle = song.songTitle;
-    // const artist = song.artist;
     if (lastSongUpdated == 1) {
       setSong1(state => ({...state, entering: false}));
       setSong2({
@@ -82,6 +80,7 @@ function App() {
         artist: "The Testones",
         albumCover:
           "https://i.scdn.co/image/ab67616d0000b2734a052b99c042dc15f933145b",
+        initialRating: 0,
         entering: true,
       });
       setlastSongUpdated(1);
@@ -102,6 +101,7 @@ function App() {
           albumCover={song1.albumCover}
           songTitle={song1.title}
           artist={song1.artist}
+          initialRating={song1.initialRating}
           onRatePressed={ratePressed}
           entering={song1.entering}
           songNum={1}
@@ -110,6 +110,7 @@ function App() {
           albumCover={song2.albumCover}
           songTitle={song2.title}
           artist={song2.artist}
+          initialRating={song2.initialRating}
           onRatePressed={ratePressed}
           entering={song2.entering}
           songNum={2}
@@ -120,7 +121,8 @@ function App() {
     case 1:
     return(
       <div className="App">
-        <h1>Loading</h1>
+        <img src={loadingIcon} class="centered"></img>
+        <image src={loadingIcon}></image>
       </div>
     );
 
