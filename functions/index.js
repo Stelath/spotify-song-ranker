@@ -52,7 +52,7 @@ exports.callback = functions.https.onRequest(async (req, res) => {
       console.log("refresh_token:", refresh_token);
 
       functions.logger.log(
-        "Sucessfully retreived access token. Expires in ${expires_in} s."
+        `Sucessfully retreived access token. Expires in ${expires_in} s.`
       );
       res.send("Success! You can now close the window.");
 
@@ -84,7 +84,7 @@ exports.addMessage = functions.https.onRequest(async (req, res) => {
     .collection("messages")
     .add({ original: original });
   // Send back a message that we've successfully written the message
-  res.json({ result: `Message with ID: ${writeResult.id} added.` });
+  res.json({ result: "Message with ID: ${writeResult.id} added." });
 });
 
 // Listens for new messages added to /messages/:documentId/original and creates an
