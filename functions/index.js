@@ -110,14 +110,16 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
     });
   
 
-  spotifyApi.getPlaylistTracks("4av5f1eu27t2FSeUAGBChH").then(
+  spotifyApi.getPlaylistTracks("5RO0m5fmEBkcwAXHAuw1zT").then(
     (data) => {
-      console.log("Tracks data", data);
+      console.log("Tracks data", data.items);
     },
     (err) => {
       functions.logger.error("Something went wrong!", err);
     }
   );
+
+  res.json({result: "Got spotify playlist successfully!"});
 });
 
 // Take the text parameter passed to this HTTP endpoint and insert it into
