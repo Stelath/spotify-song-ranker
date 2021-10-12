@@ -47,7 +47,7 @@ exports.callback = functions.https.onRequest(async (req, res) => {
       const expiresAt = expiresIn - 120 + Math.floor(Date.now() / 1000);
 
       // Push the new message into Firestore using the Firebase Admin SDK.
-      await admin.firestore().collection("spotifyAPIKeys").doc("stelath").set({
+      await admin.firestore().collection("spotifyAPIKeys").doc("username").set({
         refresh_token: refreshToken,
         access_token: accessToken,
         expires_at: expiresAt,
@@ -70,7 +70,7 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
   await admin
     .firestore()
     .collection("spotifyAPIKeys")
-    .doc("stelath")
+    .doc("username")
     .get()
     .then(async (snap) => {
       if (snap.exists) {
@@ -92,7 +92,7 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
           await admin
             .firestore()
             .collection("spotifyAPIKeys")
-            .doc("stelath")
+            .doc("username")
             .set({
               access_token: accessToken,
               expires_at: expiresAt,
@@ -108,29 +108,53 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
         functions.logger.error("Unable to get users Spotify API data");
       }
     });
-    
-  spotifyApi.getPlaylistTracks("5RO0m5fmEBkcwAXHAuw1zT").then(
+  
+    const playlistId = "5RO0m5fmEBkcwAXHAuw1zT";
+  spotifyApi.getPlaylistTracks(playlistId).then(
     (data) => {
-      console.log("Tracks data", data.body["items"]);
+      const songs = [];
+
       data.body["items"].forEach(async (song) => {
         const title = song["track"]["name"];
         const artist = song["track"]["artists"][0]["name"];
         const albumCover = song["track"]["album"]["images"][0]["url"];
         const ratings = [];
         const overallRating = 0;
-
-        await admin
-        .firestore()
-        .collection("songs")
-        .doc(title)
-        .set({
+        
+        const song = {
           title: title,
           artist: artist,
           album_cover: albumCover,
           ratings: ratings,
           overall_rating: overallRating
-        });
+        }
+        
+        songs.push(song);
       });
+
+      const originalSongs = await admin
+      .firestore()
+      .collection("playlists")
+      .doc("username")
+      .get()
+      .then(async (snap) => {
+        if(snap.exists) {break;}
+        return (snap.docData());
+      });
+
+      originalSongs.forEach((song) => {
+        
+      })
+
+      await admin
+        .firestore()
+        .collection("playlists")
+        .doc(("username"))
+        .set({
+          songs: songs,
+          playlist_id: '5RO0m5fmEBkcwAXHAuw1zT'
+        })
+        .then(functions.logger.log("Updated playlist in firestore"));
     },
     (err) => {
       functions.logger.error("Something went wrong!", err);
