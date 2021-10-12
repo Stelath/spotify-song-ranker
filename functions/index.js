@@ -96,7 +96,7 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
             .set({
               access_token: accessToken,
               expires_at: expiresAt,
-            });
+            }, {merge: true});
 
           functions.logger.log(
             `Sucessfully refreshed access token. Expires in ${expiresIn} s.`
@@ -111,12 +111,25 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
     
   spotifyApi.getPlaylistTracks("5RO0m5fmEBkcwAXHAuw1zT").then(
     (data) => {
-      console.log("Tracks data", data["items"]);
-      data.items.forEach(song => {
+      console.log("Tracks data", data.body["items"]);
+      data.body["items"].forEach(async (song) => {
         const title = song["track"]["name"];
         const artist = song["track"]["artists"][0]["name"];
-        const albumCover = 
-        const rating = 0;
+        const albumCover = song["track"]["album"]["images"][0]["url"];
+        const ratings = [];
+        const overallRating = 0;
+
+        await admin
+        .firestore()
+        .collection("songs")
+        .doc(title)
+        .set({
+          title: title,
+          artist: artist,
+          album_cover: albumCover,
+          ratings: ratings,
+          overall_rating: overallRating
+        });
       });
     },
     (err) => {
@@ -126,6 +139,22 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
 
   res.json({result: "Got spotify playlist successfully!"});
 });
+
+exports.makeUppercase = functions.firestore
+  .document("/songs/{documentId}")
+  .onUpdate((change, context) => {
+    // Grab the current value of what was written to Firestore.
+    const ratings = change.after.data().ratings;
+    const overallRating = ratings.reduce((a, b) => a + b) / ratings.length;;
+
+    // Access the parameter `{documentId}` with `context.params`
+    functions.logger.log("Updateing Rating", context.params.documentId, overallRating);
+
+    // You must return a Promise when performing asynchronous tasks inside a Functions such as
+    // writing to Firestore.
+    // Setting an 'uppercase' field in Firestore document returns a Promise.
+    return snap.ref.set({ overall_rating: overallRating }, { merge: true });
+  });
 
 // Take the text parameter passed to this HTTP endpoint and insert it into
 // Firestore under the path /messages/:documentId/original
