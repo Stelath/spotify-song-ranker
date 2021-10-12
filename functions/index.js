@@ -108,11 +108,16 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
         functions.logger.error("Unable to get users Spotify API data");
       }
     });
-  
-
+    
   spotifyApi.getPlaylistTracks("5RO0m5fmEBkcwAXHAuw1zT").then(
     (data) => {
-      console.log("Tracks data", data.items);
+      console.log("Tracks data", data["items"]);
+      data.items.forEach(song => {
+        const title = song["track"]["name"];
+        const artist = song["track"]["artists"][0]["name"];
+        const albumCover = 
+        const rating = 0;
+      });
     },
     (err) => {
       functions.logger.error("Something went wrong!", err);
