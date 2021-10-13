@@ -121,9 +121,10 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
           .then(functions.logger.log("Updated playlist in firestore"));
 
         // Update actual spotify playlist
+        var i = 0;
         playlistMergeSort(songs).forEach((song) => {
           spotifyApi
-          .reorderTracksInPlaylist("5ieJqeLJjjI8iJWaxeBLuK", 0, 10)
+          .reorderTracksInPlaylist("5ieJqeLJjjI8iJWaxeBLuK", (song["position"] - i), i)
           .then(
             function (data) {
               console.log("Tracks reordered in playlist!");
@@ -132,6 +133,7 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
               console.log("Something went wrong!", err);
             }
           );
+          i++;
         })
       }
     },
