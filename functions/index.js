@@ -9,9 +9,9 @@ admin.initializeApp();
 const SpotifyWebApi = require("spotify-web-api-node");
 
 // exports.scheduledFunction = functions.pubsub
-//   .schedule("* * * * *")
+//   .schedule('* * * * *')
 //   .onRun((context) => {
-//     functions.logger.log("This will be run every 1 minutes!");
+//     functions.logger.log('This will be run every 1 minutes!');
 //     return null;
 //   });
 const scopes = ["playlist-read-private", "playlist-modify-private"];
@@ -93,10 +93,13 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
             .firestore()
             .collection("spotifyAPIKeys")
             .doc("username")
-            .set({
-              access_token: accessToken,
-              expires_at: expiresAt,
-            }, {merge: true});
+            .set(
+              {
+                access_token: accessToken,
+                expires_at: expiresAt,
+              },
+              { merge: true }
+            );
 
           functions.logger.log(
             `Sucessfully refreshed access token. Expires in ${expiresIn} s.`
@@ -108,51 +111,64 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
         functions.logger.error("Unable to get users Spotify API data");
       }
     });
-  
-    const playlistId = "5RO0m5fmEBkcwAXHAuw1zT";
+
+  const playlistId = "5RO0m5fmEBkcwAXHAuw1zT";
   spotifyApi.getPlaylistTracks(playlistId).then(
-    (data) => {
+    async (data) => {
       const songs = [];
 
       data.body["items"].forEach(async (song) => {
+        const id = song["track"]["id"];
         const title = song["track"]["name"];
         const artist = song["track"]["artists"][0]["name"];
         const albumCover = song["track"]["album"]["images"][0]["url"];
         const ratings = [];
         const overallRating = 0;
-        
-        const song = {
+
+        songs.push({
+          id: id,
           title: title,
           artist: artist,
           album_cover: albumCover,
           ratings: ratings,
-          overall_rating: overallRating
-        }
-        
-        songs.push(song);
+          overall_rating: overallRating,
+        });
       });
 
-      const originalSongs = await admin
-      .firestore()
-      .collection("playlists")
-      .doc("username")
-      .get()
-      .then(async (snap) => {
-        if(snap.exists) {break;}
-        return (snap.docData());
-      });
+      var originalSongs;
+      await admin
+        .firestore()
+        .collection("playlists")
+        .doc("username")
+        .get().then((snap) => {
+          if(snap.exists)
+          {
+            originalSongs = snap.data().songs;
+          }
+          else
+          {
+            originalSongs = [];
+          }
+        });
 
-      originalSongs.forEach((song) => {
-        
-      })
+        console.log('ORIGINAL SONGS:', originalSongs);
+
+      songs.forEach((song, index, songsArr) => {
+        originalSongs.forEach((originalSong) => {
+          if (song["id"] == originalSong["id"]) {
+            songsArr[index]["ratings"] = originalSong["ratings"];
+            songsArr[index]["overall_rating"] = originalSong["overall_rating"];
+          }
+        });
+      });
 
       await admin
         .firestore()
         .collection("playlists")
-        .doc(("username"))
+        .doc("username")
         .set({
           songs: songs,
-          playlist_id: '5RO0m5fmEBkcwAXHAuw1zT'
+          playlist_id: "5RO0m5fmEBkcwAXHAuw1zT",
         })
         .then(functions.logger.log("Updated playlist in firestore"));
     },
@@ -161,54 +177,25 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
     }
   );
 
-  res.json({result: "Got spotify playlist successfully!"});
+  res.json({ result: "Got spotify playlist successfully!" });
 });
 
-exports.makeUppercase = functions.firestore
+// Listens for new messages added to /playlists/:documentId/ratings and updates
+// the overall rating to /playlists/:documentId/overall_rating
+exports.updateOverallRating = functions.firestore
   .document("/songs/{documentId}")
   .onUpdate((change, context) => {
     // Grab the current value of what was written to Firestore.
     const ratings = change.after.data().ratings;
-    const overallRating = ratings.reduce((a, b) => a + b) / ratings.length;;
+    const overallRating = ratings.reduce((a, b) => a + b) / ratings.length;
 
     // Access the parameter `{documentId}` with `context.params`
-    functions.logger.log("Updateing Rating", context.params.documentId, overallRating);
+    functions.logger.log(
+      "Updateing Rating",
+      context.params.documentId,
+      overallRating
+    );
 
-    // You must return a Promise when performing asynchronous tasks inside a Functions such as
-    // writing to Firestore.
-    // Setting an 'uppercase' field in Firestore document returns a Promise.
+    // Returns the promise to set overall_rating to the new average
     return snap.ref.set({ overall_rating: overallRating }, { merge: true });
-  });
-
-// Take the text parameter passed to this HTTP endpoint and insert it into
-// Firestore under the path /messages/:documentId/original
-exports.addMessage = functions.https.onRequest(async (req, res) => {
-  // Grab the text parameter.
-  const original = req.query.text;
-  // Push the new message into Firestore using the Firebase Admin SDK.
-  const writeResult = await admin
-    .firestore()
-    .collection("messages")
-    .add({ original: original });
-  // Send back a message that we've successfully written the message
-  res.json({ result: "Message with ID: ${writeResult.id} added." });
-});
-
-// Listens for new messages added to /messages/:documentId/original and creates an
-// uppercase version of the message to /messages/:documentId/uppercase
-exports.makeUppercase = functions.firestore
-  .document("/messages/{documentId}")
-  .onCreate((snap, context) => {
-    // Grab the current value of what was written to Firestore.
-    const original = snap.data().original;
-
-    // Access the parameter `{documentId}` with `context.params`
-    functions.logger.log("Uppercasing", context.params.documentId, original);
-
-    const uppercase = original.toUpperCase();
-
-    // You must return a Promise when performing asynchronous tasks inside a Functions such as
-    // writing to Firestore.
-    // Setting an 'uppercase' field in Firestore document returns a Promise.
-    return snap.ref.set({ uppercase }, { merge: true });
   });
