@@ -3,14 +3,13 @@ const functions = require("firebase-functions");
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require("firebase-admin");
-admin.initializeApp();
 
 // Spotify SDKs to acess the Users Spotify
 const SpotifyWebApi = require("spotify-web-api-node");
 
-const scopes = ["playlist-read-private", "playlist-read-public", "playlist-modify-public", "playlist-modify-private"];
+const scopes = ["playlist-read-private", "playlist-read-collaborative", "playlist-modify-public", "playlist-modify-private"];
 const credidentials = {
-  redirectUri: "http://localhost:5001/xc-playlist/us-central1/callback",
+  redirectUri: "http://localhost:5001/xc-playlist/us-central1/spotifyAuth-callback",
   clientId: "d869ced3e5734fde862839bba66b096a",
   clientSecret: "59555faa8f734aed9d6d48f5d180a211",
 };

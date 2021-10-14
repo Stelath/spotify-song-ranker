@@ -3,14 +3,18 @@ const functions = require("firebase-functions");
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require("firebase-admin");
-admin.initializeApp();
 
 // Spotify SDKs to acess the Users Spotify
 const SpotifyWebApi = require("spotify-web-api-node");
+const credidentials = {
+  redirectUri: "http://localhost:5001/xc-playlist/us-central1/spotifyAuth-callback",
+  clientId: "d869ced3e5734fde862839bba66b096a",
+  clientSecret: "59555faa8f734aed9d6d48f5d180a211",
+};
 
-const playlistMergeSort = require("./logic/playlist-merge-sort");
+const playlistMergeSort = require("./logic/spotify-playlist-merge-sort");
 
-exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
+exports.updateSpotifyPlaylists = functions.https.onRequest(async (req, res) => {
   const spotifyApi = new SpotifyWebApi(credidentials);
 
   await admin
@@ -122,19 +126,26 @@ exports.getSpotifyPlaylist = functions.https.onRequest(async (req, res) => {
 
         // Update actual spotify playlist
         var i = 0;
-        playlistMergeSort(songs).forEach((song) => {
-          spotifyApi
-          .reorderTracksInPlaylist("5ieJqeLJjjI8iJWaxeBLuK", (song["position"] - i), i)
-          .then(
-            function (data) {
-              console.log("Tracks reordered in playlist!");
-            },
-            function (err) {
-              console.log("Something went wrong!", err);
-            }
-          );
+        playlistMergeSort.mergeSortPlaylist(songs).forEach(async (song) => {
+          console.log("Reordering Playlist...");
+
+          await spotifyApi
+            .reorderTracksInPlaylist(
+              playlistId,
+              song["position"] + i,
+              i
+            )
+            .then(
+              (data) => {
+                console.log("Tracks reordered in playlist!");
+              },
+              (err) => {
+                console.log("Something went wrong!", err);
+              }
+            );
+          
           i++;
-        })
+        });
       }
     },
     (err) => {

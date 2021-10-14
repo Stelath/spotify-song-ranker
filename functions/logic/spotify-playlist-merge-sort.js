@@ -3,7 +3,7 @@ function mergeSongs(left, right) {
   // Break out of loop if any one of the array gets empty
   while (left.length && right.length) {
     // Pick the smaller among the smallest element of left and right sub arrays
-    if (left[0]["overall_rating"] < right[0]["overall_rating"]) {
+    if (left[0]["overall_rating"] > right[0]["overall_rating"]) {
       arr.push(left.shift());
     } else {
       arr.push(right.shift());
@@ -15,14 +15,14 @@ function mergeSongs(left, right) {
   return [...arr, ...left, ...right];
 }
 
-exports = function (songs) {
-  const half = array.length / 2;
+exports.mergeSortPlaylist = function mergeSortPlaylist(songs, spotifyApi) {
+  const half = songs.length / 2;
 
   // Base case or terminating case
-  if (array.length < 2) {
-    return array;
+  if (songs.length < 2) {
+    return songs;
   }
 
-  const left = array.splice(0, half);
-  return merge(mergeSort(left), mergeSort(array));
+  const left = songs.splice(0, half);
+  return mergeSongs(mergeSortPlaylist(left), mergeSortPlaylist(songs), spotifyApi);
 };

@@ -3,7 +3,6 @@ const functions = require("firebase-functions");
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require("firebase-admin");
-admin.initializeApp();
 
 // Listens for new messages added to /playlists/:documentId/ratings and updates
 // the overall rating to /playlists/:documentId/overall_rating
