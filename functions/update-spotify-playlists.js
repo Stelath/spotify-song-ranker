@@ -7,7 +7,8 @@ const admin = require("firebase-admin");
 // Spotify SDKs to acess the Users Spotify
 const SpotifyWebApi = require("spotify-web-api-node");
 const credidentials = {
-  redirectUri: "http://localhost:5001/xc-playlist/us-central1/spotifyAuth-callback",
+  redirectUri:
+    "http://localhost:5001/xc-playlist/us-central1/spotifyAuth-callback",
   clientId: "d869ced3e5734fde862839bba66b096a",
   clientSecret: "59555faa8f734aed9d6d48f5d180a211",
 };
@@ -83,7 +84,6 @@ exports.updateSpotifyPlaylists = functions.https.onRequest(async (req, res) => {
           album_cover: albumCover,
           ratings: ratings,
           overall_rating: overallRating,
-          position: i,
         });
 
         i++;
@@ -125,17 +125,30 @@ exports.updateSpotifyPlaylists = functions.https.onRequest(async (req, res) => {
           .then(functions.logger.log("Updated playlist in firestore"));
 
         // Update actual spotify playlist
-        var i = 0;
-        playlistMergeSort.mergeSortPlaylist(songs).forEach(async (song) => {
-          console.log("Reordering Playlist...");
+        console.log("Reordering Playlist...");
+        for (let i = 0; i < songs.length; i++) {
+          var max = i;
+          for (let n = i + 1; n < songs.length; n++) {
+            if (songs[n]["overall_rating"] > songs[max]["overall_rating"]) {
+              max = n;
+            }
+          }
 
-          await spotifyApi
-            .reorderTracksInPlaylist(
-              playlistId,
-              song["position"] + i,
-              i
-            )
-            .then(
+          var songsChanged = false;
+          const prevSongs = [...songs];
+          songs.splice(i, 0, songs.splice(max, 1)[0]);
+
+          songs.forEach((song) => {
+            prevSongs.forEach((prevSong) => {
+              if (song["id"] != song["id"]) {
+                songsChanged = true;
+              }
+            });
+          });
+
+          if (songsChanged) {
+            console.log("Reordering Songs:");
+            await spotifyApi.reorderTracksInPlaylist(playlistId, max, i).then(
               (data) => {
                 console.log("Tracks reordered in playlist!");
               },
@@ -143,9 +156,8 @@ exports.updateSpotifyPlaylists = functions.https.onRequest(async (req, res) => {
                 console.log("Something went wrong!", err);
               }
             );
-          
-          i++;
-        });
+          }
+        }
       }
     },
     (err) => {
