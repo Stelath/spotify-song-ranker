@@ -14,7 +14,7 @@ import { rateSong } from "./logic/rating";
 function App() {
   const [loading, setLoading] = useState(1);
 
-  const [songList, setSongList] = useState(() => {
+  const [songList, setSongList] = useState(async () => {
     // Get the firebase firestore database
     const db = getFirestore(firebaseApp);
 
@@ -54,7 +54,7 @@ function App() {
   // Create a variable to store the last song updated
   const [lastSongUpdated, setlastSongUpdated] = useState(1);
 
-  function updateSong() {
+  async function updateSong() {
     if (lastSongUpdated == 1) {
       setSong1((state) => ({ ...state, entering: false }));
       setSong2({
