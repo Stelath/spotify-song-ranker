@@ -23,8 +23,8 @@ export function getRandomSongData(songList) {
   const songData = {
     title: song["title"],
     artist: song["artist"],
-    albumCover: song["albumCover"],
-    overallRating: song["overallRating"],
+    albumCover: song["album_cover"],
+    overallRating: song["overall_rating"],
   };
 
   return songData;
