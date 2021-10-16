@@ -16,18 +16,14 @@ export async function getSongs(db) {
   }
 }
 
-function getRandomFromList(list) {
-  let listArray = Array.from(list);
-  return listArray[Math.floor(Math.random() * listArray.length)];
-}
-
 export function getRandomSongData(songList) {
-  const song = getRandomFromList(songList);
+  const song = songList[Math.floor(Math.random() * songList.length)];
 
   const songData = {
     title: song["songTitle"],
     artist: song["artist"],
     albumCover: song["albumCover"],
+    overallRating: song["overallRating"],
   };
 
   return songData;

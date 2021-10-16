@@ -4,9 +4,6 @@ import firebaseApp from "./logic/firebase";
 import { arrayRemove, getFirestore } from "firebase/firestore";
 import "animate.css";
 
-// Assets
-import loadingIcon from "./assets/loading-icon.gif";
-
 // Import Components
 import Song from "./components/Song";
 
@@ -38,17 +35,15 @@ function App() {
   // Create the states for the album cover, artist, and title of a random song on the playlist
   // Song 1
   const [song1, setSong1] = useState({
-    title: "Africa",
-    artist: "TOTO",
-    albumCover:
-      "https://i.scdn.co/image/ab67616d0000b2734a052b99c042dc15f933145b",
+    title: "Loading",
+    artist: "Loading",
+    albumCover: "",
     entering: false,
   });
   const [song2, setSong2] = useState({
-    title: "Africa",
-    artist: "TOTO",
-    albumCover:
-      "https://i.scdn.co/image/ab67616d0000b2734a052b99c042dc15f933145b",
+    title: "Loading",
+    artist: "Loading",
+    albumCover: "",
     entering: false,
   });
 
@@ -63,14 +58,14 @@ function App() {
     if (lastSongUpdated == 1) {
       setSong1((state) => ({ ...state, entering: false }));
       setSong2({
-        ...getRandomSongData(list),
+        ...getRandomSongData(songList),
         entering: true,
       });
       setlastSongUpdated(2);
     } else {
       setSong2((state) => ({ ...state, entering: false }));
       setSong1({
-        ...getRandomSongData(list),
+        ...getRandomSongData(songList),
         entering: true,
       });
       setlastSongUpdated(1);
@@ -108,12 +103,7 @@ function App() {
       );
 
     case 1:
-      return (
-        <div className="App">
-          <img src={loadingIcon} class="centered"></img>
-          <image src={loadingIcon}></image>
-        </div>
-      );
+      return <div className="App"></div>;
 
     case 2:
       return (
