@@ -16,8 +16,8 @@ const scopes = [
 const credidentials = {
   redirectUri:
     "https://us-central1-xc-playlist.cloudfunctions.net/spotifyAuth-callback",
-  clientId: "d869ced3e5734fde862839bba66b096a",
-  clientSecret: "59555faa8f734aed9d6d48f5d180a211",
+  clientId: "",
+  clientSecret: "",
 };
 
 exports.auth = functions.https.onRequest(async (req, res) => {
